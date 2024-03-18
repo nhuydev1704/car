@@ -1,23 +1,15 @@
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 import { AppConfig } from '@/utils/AppConfig';
+
+import Header from './Header';
 
 const BaseTemplate = (props: { children: React.ReactNode }) => {
   const t = useTranslations('BaseTemplate');
 
   return (
     <div className="w-full text-gray-700 antialiased">
-      <header className="navbar bg-base-100">
-        <div className="flex-1">
-          <Image src="/icon.png" alt={AppConfig.name} width={60} height={20} />
-        </div>
-        <div className="flex-none">
-          <ul className="menu menu-horizontal px-1">
-            <li>demo</li>
-          </ul>
-        </div>
-      </header>
+      <Header />
 
       <main>{props.children}</main>
 

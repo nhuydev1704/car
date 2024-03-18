@@ -19,6 +19,14 @@ export default withSentryConfig(
       },
       poweredByHeader: false,
       reactStrictMode: true,
+      images: {
+        remotePatterns: [
+          {
+            protocol: 'https',
+            hostname: 'autochot.com',
+          },
+        ],
+      },
       experimental: {
         // Related to Pino error with RSC: https://github.com/orgs/vercel/discussions/3150
         serverComponentsExternalPackages: ['pino'],
