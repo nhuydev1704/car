@@ -1,14 +1,13 @@
-'use client';
-
+import { currentUser } from '@clerk/nextjs';
 import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import React from 'react';
 
 import { AppConfig } from '@/utils/AppConfig';
 
-const Header = () => {
-  const pathname = usePathname();
+import HeaderAdmin from './Header.Admin';
+import HeaderUser from './Header.User';
+
+const Header = async () => {
+  const user = await currentUser();
 
   return (
     <header className="navbar sticky top-0 z-[9999] flex justify-center bg-base-100 py-0 shadow-sm">
@@ -17,23 +16,7 @@ const Header = () => {
           <Image src="/icon.png" alt={AppConfig.name} width={45} height={20} />
         </div>
         <div className="flex-none">
-          <ul className="menu menu-horizontal gap-2 px-1 font-semibold">
-            <li
-              className={
-                pathname === '/'
-                  ? 'rounded-full bg-purple-400 font-bold text-[#f1f1f1]'
-                  : ''
-              }
-            >
-              <Link href="/">Trang chủ</Link>
-            </li>
-            <li>
-              <Link href="/">Giới thiệu</Link>
-            </li>
-            <li>
-              <Link href="/">Liên hệ</Link>
-            </li>
-          </ul>
+          {user ? <HeaderAdmin /> : <HeaderUser />}
         </div>
       </div>
     </header>

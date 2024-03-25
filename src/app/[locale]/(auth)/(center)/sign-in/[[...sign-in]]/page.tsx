@@ -17,13 +17,16 @@ const SignInPage = () => (
   <SignIn
     appearance={{
       elements: {
-        footer: {
-          display: 'none',
-        },
         socialButtons: {
           display: 'none',
         },
         dividerRow: {
+          display: 'none',
+        },
+        footer: {
+          display: 'none',
+        },
+        formFieldAction__password: {
           display: 'none',
         },
       },

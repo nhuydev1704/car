@@ -11,6 +11,21 @@ export const EditGuestbookValidation = z.object({
   body: z.string().min(1),
 });
 
+export const EditCategoryValidation = z.object({
+  id: z.coerce.number(),
+  name: z.string().min(1),
+  image: z.string().optional(),
+});
+
 export const DeleteGuestbookValidation = z.object({
   id: z.coerce.number(),
+});
+
+export const DeleteCategoryValidation = z.object({
+  id: z.coerce.number(),
+});
+
+export const categoryValidate = z.object({
+  name: z.string().min(1),
+  image: z.string().optional(),
 });

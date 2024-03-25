@@ -13,7 +13,7 @@ const ProductItem = () => {
           layout="fill"
           objectFit="cover"
           alt="product item"
-          src="https://autochot.com/uploads/img/2024/12/117686/large_9116976d48d08fa3c4d462a6fb00e756.jpeg"
+          src="https://autochot.com/uploads/img/2024/13/117825/large_efbdfee1cba4dc59147dbf5d965d569b.jpeg"
         />
       </div>
       <div className="px-[15px] py-[10px]">

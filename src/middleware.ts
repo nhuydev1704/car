@@ -12,7 +12,7 @@ const intlMiddleware = createMiddleware({
 
 export default authMiddleware({
   publicRoutes: (req: NextRequest) =>
-    !req.nextUrl.pathname.includes('/dashboard'),
+    !req.nextUrl.pathname.includes('/admin/category'),
 
   beforeAuth: (req) => {
     // Execute next-intl middleware before Clerk's auth middleware
