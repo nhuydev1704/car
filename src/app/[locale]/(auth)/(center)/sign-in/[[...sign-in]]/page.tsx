@@ -13,6 +13,22 @@ export async function generateMetadata(props: { params: { locale: string } }) {
   };
 }
 
-const SignInPage = () => <SignIn />;
+const SignInPage = () => (
+  <SignIn
+    appearance={{
+      elements: {
+        footer: {
+          display: 'none',
+        },
+        socialButtons: {
+          display: 'none',
+        },
+        dividerRow: {
+          display: 'none',
+        },
+      },
+    }}
+  />
+);
 
 export default SignInPage;
