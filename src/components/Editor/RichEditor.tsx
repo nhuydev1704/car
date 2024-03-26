@@ -88,7 +88,7 @@ const RichEditor = ({
           menubar: false,
           statubar: true,
           branding: false,
-          async file_picker_callback(callback: any, value: any, meta: any) {
+          async file_picker_callback(callback: any, _value: any, meta: any) {
             if (meta?.filetype === 'image') {
               const input: any = document.getElementById('my-file-upload');
               input.click();
