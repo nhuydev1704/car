@@ -20,3 +20,6 @@ body,
 body {
   background: white;
 }
+.Toastify__toast-container {
+  z-index: 9999999999 !important;
+}

@@ -1,8 +1,10 @@
 import '@/styles/global.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
+import { ToastContainer } from 'react-toastify';
 
 import { AppConfig } from '@/utils/AppConfig';
 
@@ -52,6 +54,18 @@ export default function RootLayout(props: {
         />
       </head>
       <body>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <NextIntlClientProvider
           locale={props.params.locale}
           messages={messages}

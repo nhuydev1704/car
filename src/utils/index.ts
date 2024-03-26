@@ -80,3 +80,32 @@ export function readMoney(num: any): string {
     temp.substring(0, 1).toUpperCase() + temp.substring(1).toLowerCase();
   return `${result === '' ? 'Không' : result} đồng chẵn`;
 }
+
+export function convertToVietnameseCurrency(number: number): string {
+  const units: string[] = ['nghìn', 'triệu', 'tỷ', 'nghìn tỷ', 'triệu tỷ'];
+  let result: string = '';
+  let unitIndex: number = 0;
+
+  while (number > 0) {
+    const currentChunk: number = number % 1000000;
+    // eslint-disable-next-line no-param-reassign
+    number = Math.floor(number / 1000000);
+
+    if (currentChunk !== 0) {
+      if (unitIndex === 0 && number !== 0 && currentChunk === 1) {
+        result = `1 ${units[unitIndex]} ${result}`;
+      } else {
+        result = `${currentChunk.toString()} ${units[unitIndex]} ${result}`;
+      }
+    }
+
+    // eslint-disable-next-line no-plusplus
+    unitIndex++;
+  }
+
+  if (result.trim() === '') {
+    return '0';
+  }
+
+  return result.trim();
+}

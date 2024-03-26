@@ -5,14 +5,14 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { toast } from 'react-toastify';
 
-const DeleteCategory = (props: any) => {
+const DeleteProduct = (props: any) => {
   const [loading, setLoading] = React.useState(false);
 
   const router = useRouter();
 
   const handleDelete = async () => {
     setLoading(true);
-    await fetch(`/api/category`, {
+    await fetch(`/api/product`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -23,7 +23,6 @@ const DeleteCategory = (props: any) => {
     });
     setLoading(false);
     toast.success('Xoá thành công !');
-
     router.refresh();
   };
 
@@ -39,4 +38,4 @@ const DeleteCategory = (props: any) => {
   );
 };
 
-export default DeleteCategory;
+export default DeleteProduct;

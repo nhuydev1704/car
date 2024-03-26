@@ -3,90 +3,111 @@ import { NextResponse } from 'next/server';
 
 import { db } from '@/libs/DB';
 import { logger } from '@/libs/Logger';
-import { categorySchema, productSchema } from '@/models/Schema';
+import { productSchema } from '@/models/Schema';
 import {
   DeleteCategoryValidation,
-  EditCategoryValidation,
+  productEditValidate,
   productValidate,
 } from '@/validations/GuestbookValidation';
 
 export const POST = async (request: Request) => {
-  const json = await request.json();
-  const parse = productValidate.safeParse(json);
+  const formData = await request.formData();
+  const json: any = Object.fromEntries(formData.entries());
+
+  const parse = productEditValidate.safeParse({
+    ...json,
+    category_id: +json.category_id,
+  });
 
   if (!parse.success) {
     return NextResponse.json(parse.error.format(), { status: 422 });
   }
 
   try {
-    const category = await db
+    if (parse.data.id) {
+      await db
+        .update(productSchema)
+        .set({
+          ...parse.data,
+          updatedAt: sql`(strftime('%s', 'now'))`,
+        })
+        .where(eq(productSchema.id, parse.data.id))
+        .run();
+
+      logger.info('A product entry has been updated');
+
+      return NextResponse.json({});
+    }
+    const product = await db
       .insert(productSchema)
       .values(parse.data)
       .returning();
 
-    logger.info('A new category has been created');
+    logger.info('A new product has been created');
 
     return NextResponse.json({
-      id: category[0]?.id,
+      id: product[0]?.id,
     });
   } catch (error) {
-    logger.error(error, 'An error occurred while creating a category');
+    logger.error(error, 'An error occurred while creating a product');
 
     return NextResponse.json({}, { status: 500 });
   }
 };
 
 export const GET = async (request: Request) => {
-  console.log('🚀 ~ GET ~ parse:', request.url);
-
   // get detail
   const id: any = request.url.split('=')[1];
   if (id) {
-    const category = await db
+    const product = await db
       .select()
       .from(productSchema)
       .where(eq(productSchema.id, id))
       .get();
 
-    if (!category) {
+    if (!product) {
       return NextResponse.json({}, { status: 404 });
     }
 
-    return NextResponse.json(category);
+    return NextResponse.json(product);
   }
 
-  const category = await db.select().from(categorySchema).all();
+  const product = await db.select().from(productSchema).all();
 
-  if (!category) {
+  if (!product) {
     return NextResponse.json({}, { status: 404 });
   }
 
-  return NextResponse.json(category);
+  return NextResponse.json(product);
 };
 
 export const PUT = async (request: Request) => {
-  const json = await request.json();
-  const parse = EditCategoryValidation.safeParse(json);
+  const formData = await request.formData();
+  const json: any = Object.fromEntries(formData.entries());
 
+  const parse: any = productValidate.safeParse({
+    ...json,
+    category_id: +json.category_id,
+  });
   if (!parse.success) {
     return NextResponse.json(parse.error.format(), { status: 422 });
   }
 
   try {
     await db
-      .update(categorySchema)
+      .update(productSchema)
       .set({
         ...parse.data,
         updatedAt: sql`(strftime('%s', 'now'))`,
       })
-      .where(eq(categorySchema.id, parse.data.id))
+      .where(eq(productSchema.id, parse.data.id))
       .run();
 
-    logger.info('A category entry has been updated');
+    logger.info('A product entry has been updated');
 
     return NextResponse.json({});
   } catch (error) {
-    logger.error(error, 'An error occurred while updating a category');
+    logger.error(error, 'An error occurred while updating a product');
 
     return NextResponse.json({}, { status: 500 });
   }

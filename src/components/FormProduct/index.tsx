@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import React from 'react';
 import CurrencyInput from 'react-currency-input-field';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import type { z } from 'zod';
 
 import { readMoney } from '@/utils';
@@ -29,7 +30,6 @@ const FormProduct = () => {
   } = useForm<z.infer<typeof productValidate>>({
     resolver: zodResolver(productValidate),
   });
-  console.log('🚀 ~ FormProduct ~ errors:', errors);
 
   const price = watch('price');
   const categoryId = watch('category_id');
@@ -39,70 +39,138 @@ const FormProduct = () => {
   const [logo, setLogo] = React.useState<any>('');
 
   const handleCreate = handleSubmit(async (data) => {
+    setLoading(true);
+
     const dataImages = logo;
     const images = [];
-    // eslint-disable-next-line no-plusplus
-    for (let i: any = 0; i < dataImages.length; i++) {
-      const file = dataImages[i];
-      const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
+    let postImage: any = [];
+
+    if (slug) {
+      // xử lý danh sách ảnh
       const formData = new FormData();
-      formData.append('file', file.file);
+      dataImages.forEach((item: any) => {
+        if (item?.file) {
+          formData.append('file', item.file);
+        }
+      });
       formData.append('upload_preset', 'qznfh3dk');
 
-      // eslint-disable-next-line no-await-in-loop
-      const res: any = await axios.post(url, formData);
+      const replacements: any = [];
 
-      images.push(res.data.secure_url);
-    }
+      if (dataImages.some((item: any) => item?.file)) {
+        const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
 
-    setLoading(true);
-    if (slug) {
-      await fetch(`/api/product`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: slug,
-          name: data.name,
-          category_id: data.category_id,
-          price: data.price,
-          description: data.description,
-          attribute: data.attribute,
-          images: images.join(','),
-        }),
+        // eslint-disable-next-line no-await-in-loop
+        const res: any = await axios.post(url, formData);
+
+        replacements.push(res.data.secure_url);
+      }
+
+      postImage = dataImages.map((item: any) => {
+        if (item?.file) {
+          return replacements.shift(); // Lấy phần tử đầu của replacements
+        }
+        return item?.dataURL;
       });
     } else {
-      await fetch(`/api/product`, {
-        method: 'POST',
+      // eslint-disable-next-line no-plusplus
+      for (let i: any = 0; i < dataImages.length; i++) {
+        const file = dataImages[i];
+        const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
+        const formData = new FormData();
+        formData.append('file', file.file);
+        formData.append('upload_preset', 'qznfh3dk');
+
+        // eslint-disable-next-line no-await-in-loop
+        const res: any = await axios.post(url, formData);
+
+        images.push(res.data.secure_url);
+      }
+    }
+
+    if (slug) {
+      // sen formData
+      const formDataProduct = new FormData();
+      formDataProduct.append('id', `${slug}`);
+      formDataProduct.append('name', data.name);
+      formDataProduct.append('category_id', `${data.category_id}`);
+      formDataProduct.append('price', `${+data.price * 1000000}`);
+      formDataProduct.append('description', data.description || '');
+      formDataProduct.append('attribute', data.attribute || '');
+      formDataProduct.append('images', postImage.join(','));
+
+      await axios.post(`/api/product`, formDataProduct, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
-        body: JSON.stringify({
-          name: data.name,
-          category_id: data.category_id,
-          price: data.price,
-          description: data.description,
-          attribute: data.attribute,
-          images: images.join(','),
-        }),
       });
+      toast.success('Cật nhật thành công !');
+
+      // await fetch(`/api/product`, {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     id: slug,
+      //     name: data.name,
+      //     category_id: data.category_id,
+      //     price: +data.price * 1000000,
+      //     description: data.description,
+      //     attribute: data.attribute,
+      //     images: images.join(','),
+      //   }),
+      // });
+    } else {
+      // sen formData
+      const formDataProduct = new FormData();
+      formDataProduct.append('name', data.name);
+      formDataProduct.append('category_id', `${data.category_id}`);
+      formDataProduct.append('price', `${+data.price * 1000000}`);
+      formDataProduct.append('description', data.description || '');
+      formDataProduct.append('attribute', data.attribute || '');
+      formDataProduct.append('images', images.join(','));
+
+      await axios.post(`/api/product`, formDataProduct, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      toast.success('Thêm thành công !');
+
+      // await fetch(`/api/product`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     name: data.name,
+      //     category_id: data.category_id,
+      //     price: +data.price * 1000000,
+      //     description: data.description,
+      //     attribute: data.attribute,
+      //     images: images.join(','),
+      //   }),
+      // });
     }
     setLoading(false);
     window.location.href = '/admin/product';
     reset();
   });
 
-  // React.useEffect(() => {
-  //   if (slug) {
-  //     fetch(`/api/product?id=${slug}`)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         setLogo(data.image);
-  //         reset(data);
-  //       });
-  //   }
-  // }, [slug]);
+  React.useEffect(() => {
+    if (slug) {
+      fetch(`/api/product?id=${slug}`)
+        .then((res) => res.json())
+        .then((data) => {
+          reset({
+            ...data,
+            price: `${+data.price / 1000000}`,
+          });
+          setLogo(data.images.split(',').map((img: any) => ({ dataURL: img })));
+        });
+    }
+  }, [slug]);
 
   const [categories, setCategories] = React.useState<any>([]);
 

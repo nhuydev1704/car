@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import DeleteCategory from '@/components/FormCategory/DeleteCategory';
+import ImageZoom from '@/components/ImageZoom';
 import { db } from '@/libs/DB';
 import { categorySchema } from '@/models/Schema';
 
@@ -46,10 +47,12 @@ const AdminCategory = async () => {
                           <div className="avatar">
                             <div className="mask  size-12">
                               {category.image && (
-                                <img
-                                  src={category.image}
-                                  alt="Avatar Tailwind CSS Component"
-                                />
+                                <ImageZoom>
+                                  <img
+                                    src={category.image}
+                                    alt="Avatar Tailwind CSS Component"
+                                  />
+                                </ImageZoom>
                               )}
                             </div>
                           </div>

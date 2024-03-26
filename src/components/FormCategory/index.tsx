@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import type { z } from 'zod';
 
 import { categoryValidate } from '@/validations/GuestbookValidation';
@@ -40,6 +41,7 @@ const FormCategory = () => {
           image: logo,
         }),
       });
+      toast.success('Cật nhật thành công !');
     } else {
       await fetch(`/api/category`, {
         method: 'POST',
@@ -51,6 +53,7 @@ const FormCategory = () => {
           image: logo,
         }),
       });
+      toast.success('Thêm thành công !');
     }
 
     setLoading(false);
