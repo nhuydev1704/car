@@ -1,19 +1,13 @@
-import { useTranslations } from 'next-intl';
-
-import { AppConfig } from '@/utils/AppConfig';
-
 import Header from './Header';
 
 const BaseTemplate = (props: { children: React.ReactNode }) => {
-  const t = useTranslations('BaseTemplate');
-
   return (
     <div className="w-full text-gray-700 antialiased">
       <Header />
 
       <main>{props.children}</main>
 
-      <footer className="border-t border-gray-300 py-8 text-center text-sm">
+      {/* <footer className="border-t border-gray-300 py-8 text-center text-sm">
         © Copyright {new Date().getFullYear()} {AppConfig.name}.
         {` ${t('made_with')} `}
         <a
@@ -22,7 +16,7 @@ const BaseTemplate = (props: { children: React.ReactNode }) => {
         >
           CreativeDesignsGuru
         </a>
-      </footer>
+      </footer> */}
     </div>
   );
 };
