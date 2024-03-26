@@ -11,14 +11,14 @@ export default function AuthLayout(props: {
   // const dashboardUrl = '/dashboard';
   let dashboardProductUrl = '/admin/category';
 
-  if (props.params.locale === 'fr') {
+  if (props.params?.locale === 'fr') {
     clerkLocale = frFR;
   }
 
-  if (props.params.locale !== 'en') {
-    signInUrl = `/${props.params.locale}${signInUrl}`;
-    signUpUrl = `/${props.params.locale}${signUpUrl}`;
-    dashboardProductUrl = `/${props.params.locale}${dashboardProductUrl}`;
+  if (props.params?.locale !== 'en') {
+    signInUrl = `/${props.params?.locale}${signInUrl}`;
+    signUpUrl = `/${props.params?.locale}${signUpUrl}`;
+    dashboardProductUrl = `/${props.params?.locale}${dashboardProductUrl}`;
   }
 
   return (
