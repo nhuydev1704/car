@@ -1,12 +1,15 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-import { LogOutButton } from '@/components/LogOutButton';
-
 import RenderAvatar from './RenderAvatar';
+
+const LogOutButton = dynamic(() => import('@/components/LogOutButton'), {
+  ssr: false,
+});
 
 const HeaderAdmin = () => {
   const pathname = usePathname();
@@ -46,7 +49,7 @@ const HeaderAdmin = () => {
           tabIndex={0}
           className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
         >
-          <LogOutButton />
+          {pathname?.includes('/admin') && <LogOutButton />}
         </ul>
       </div>
     </ul>

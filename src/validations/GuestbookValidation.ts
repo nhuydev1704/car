@@ -29,3 +29,12 @@ export const categoryValidate = z.object({
   name: z.string().min(1),
   image: z.string().optional(),
 });
+
+export const productValidate = z.object({
+  name: z.string().min(1),
+  price: z.string(),
+  category_id: z.number().min(1),
+  description: z.string().optional(),
+  attribute: z.string().optional(),
+  images: z.string().optional(),
+});

@@ -3,16 +3,16 @@ import { NextResponse } from 'next/server';
 
 import { db } from '@/libs/DB';
 import { logger } from '@/libs/Logger';
-import { categorySchema } from '@/models/Schema';
+import { categorySchema, productSchema } from '@/models/Schema';
 import {
-  categoryValidate,
   DeleteCategoryValidation,
   EditCategoryValidation,
+  productValidate,
 } from '@/validations/GuestbookValidation';
 
 export const POST = async (request: Request) => {
   const json = await request.json();
-  const parse = categoryValidate.safeParse(json);
+  const parse = productValidate.safeParse(json);
 
   if (!parse.success) {
     return NextResponse.json(parse.error.format(), { status: 422 });
@@ -20,7 +20,7 @@ export const POST = async (request: Request) => {
 
   try {
     const category = await db
-      .insert(categorySchema)
+      .insert(productSchema)
       .values(parse.data)
       .returning();
 
@@ -44,8 +44,8 @@ export const GET = async (request: Request) => {
   if (id) {
     const category = await db
       .select()
-      .from(categorySchema)
-      .where(eq(categorySchema.id, id))
+      .from(productSchema)
+      .where(eq(productSchema.id, id))
       .get();
 
     if (!category) {
@@ -102,8 +102,8 @@ export const DELETE = async (request: Request) => {
 
   try {
     await db
-      .delete(categorySchema)
-      .where(eq(categorySchema.id, parse.data.id))
+      .delete(productSchema)
+      .where(eq(productSchema.id, parse.data.id))
       .run();
 
     logger.info('A category entry has been deleted');

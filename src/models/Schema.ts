@@ -24,3 +24,21 @@ export const categorySchema = sqliteTable('category', {
     sql`(strftime('%s', 'now'))`,
   ),
 });
+
+export const productSchema = sqliteTable('product', {
+  id: integer('id').primaryKey(),
+  name: text('name').notNull(),
+  price: text('price').notNull(),
+  category_id: integer('category_id')
+    .notNull()
+    .references(() => categorySchema.id),
+  description: text('description'),
+  attribute: text('attribute'),
+  images: text('images'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(
+    sql`(strftime('%s', 'now'))`,
+  ),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
+    sql`(strftime('%s', 'now'))`,
+  ),
+});
