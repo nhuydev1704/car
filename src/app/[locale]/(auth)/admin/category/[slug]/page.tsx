@@ -9,19 +9,19 @@ export async function generateMetadata() {
   };
 }
 
-const AdminFormCategory = () => (
-  <div className="flex justify-center p-[20px]">
-    <div className="w-full max-w-screen-2xl">
-      <div className="flex items-center gap-2">
-        <Link href="/admin/category" className="btn btn-sm">
-          <ArrowLeftIcon />
-        </Link>
-        <h1 className="font-bold underline">Cập nhật danh mục</h1>
+export default function Index() {
+  return (
+    <div className="flex justify-center p-[20px]">
+      <div className="w-full max-w-screen-2xl">
+        <div className="flex items-center gap-2">
+          <Link href="/admin/category" className="btn btn-sm">
+            <ArrowLeftIcon />
+          </Link>
+          <h1 className="font-bold underline">Cập nhật danh mục</h1>
+        </div>
+
+        <FormCategory />
       </div>
-
-      <FormCategory />
     </div>
-  </div>
-);
-
-export default AdminFormCategory;
+  );
+}

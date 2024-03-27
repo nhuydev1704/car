@@ -8,7 +8,7 @@ import ImageZoom from '@/components/ImageZoom';
 import { db } from '@/libs/DB';
 import { categorySchema } from '@/models/Schema';
 
-const AdminCategory = async () => {
+export default async function Index() {
   const categories = await db
     .select()
     .from(categorySchema)
@@ -85,6 +85,4 @@ const AdminCategory = async () => {
       </div>
     </div>
   );
-};
-
-export default AdminCategory;
+}

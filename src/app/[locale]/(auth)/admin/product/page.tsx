@@ -10,7 +10,7 @@ import { db } from '@/libs/DB';
 import { categorySchema, productSchema } from '@/models/Schema';
 import { convertToVietnameseCurrency } from '@/utils';
 
-const AdminProduct = async () => {
+export default async function Index() {
   const products = await db
     .select()
     .from(productSchema)
@@ -92,6 +92,4 @@ const AdminProduct = async () => {
       </div>
     </div>
   );
-};
-
-export default AdminProduct;
+}
