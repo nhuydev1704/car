@@ -14,6 +14,7 @@ export default async function Index() {
     .from(categorySchema)
     .orderBy(desc(categorySchema.id))
     .all();
+  console.log('🚀 ~ Index ~ categories:', categories);
 
   return (
     <div className="flex justify-center p-[20px]">

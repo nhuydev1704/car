@@ -10,7 +10,7 @@ import {
   EditCategoryValidation,
 } from '@/validations/GuestbookValidation';
 
-export const POST = async (request: Request) => {
+export async function POST(request: Request) {
   const json = await request.json();
   const parse = categoryValidate.safeParse(json);
 
@@ -34,7 +34,7 @@ export const POST = async (request: Request) => {
 
     return NextResponse.json({}, { status: 500 });
   }
-};
+}
 
 export const GET = async (request: Request) => {
   console.log('🚀 ~ GET ~ parse:', request.url);
@@ -64,7 +64,7 @@ export const GET = async (request: Request) => {
   return NextResponse.json(category);
 };
 
-export const PUT = async (request: Request) => {
+export async function PUT(request: Request) {
   const json = await request.json();
   const parse = EditCategoryValidation.safeParse(json);
 
@@ -90,7 +90,7 @@ export const PUT = async (request: Request) => {
 
     return NextResponse.json({}, { status: 500 });
   }
-};
+}
 
 export const DELETE = async (request: Request) => {
   const json = await request.json();
