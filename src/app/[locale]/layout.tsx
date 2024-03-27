@@ -38,13 +38,13 @@ export default function RootLayout(props: {
   params: { locale: string };
 }) {
   // Validate that the incoming `locale` parameter is valid
-  if (!AppConfig.locales.includes(props.params.locale)) notFound();
+  if (!AppConfig.locales.includes(props?.params?.locale)) notFound();
 
   // Using internationalization in Client Components
   const messages = useMessages();
 
   return (
-    <html data-theme="light" lang={props.params.locale}>
+    <html data-theme="light" lang={props?.params?.locale}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />

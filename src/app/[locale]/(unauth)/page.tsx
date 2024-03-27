@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic';
-import { getTranslations } from 'next-intl/server';
 
 import ProductItem from '@/components/Product/Product.Item';
 import QA from '@/components/QA/QA';
@@ -14,15 +13,10 @@ const MenuCategory = dynamic(
   },
 );
 
-export async function generateMetadata(props: { params: { locale: string } }) {
-  const t = await getTranslations({
-    locale: props.params.locale,
-    namespace: 'Index',
-  });
-
+export async function generateMetadata() {
   return {
-    title: t('meta_title'),
-    description: t('meta_description'),
+    title: 'Trang chủ',
+    description: 'Mua bán ô tô',
   };
 }
 
